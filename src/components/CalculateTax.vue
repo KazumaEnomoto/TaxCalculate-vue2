@@ -9,10 +9,11 @@
                 <div class="input-row">
                     <input type="text" placeholder="品目" >
                     <input type="number" placeholder="数量">
-                    <input type="number" placeholder="合計額" v-model="values[index]">
+                    <input type="number" value=0 placeholder="合計額" v-model.number="values[index]">
                 </div>
             </div>
             <div>
+                <p>インプットの合計額：{{sumValues}}</p>
                 <p>レシートの合計額</p>
                 <input type="number" >
             </div>
@@ -25,13 +26,13 @@ export default {
     data() {
         return {
             rowCount: 3,
-            values: ['', '', ''],
+            values: [0, 0, 0],
         };
     },
     methods: {
         addRow() {
             this.rowCount += 1;
-            this.values.splice(this.rowCount - 1, 0, '');
+            this.values.splice(this.rowCount - 1, 0, 0);
         },
         removeRow() {
             this.rowCount -= 1;
@@ -42,6 +43,12 @@ export default {
         isMoreZero() {
             return this.rowCount > 0;
         },
+        sumValues() {
+            const sumValue = this.values.reduce((sumValue, value) => {
+                return sumValue + value;
+            }, 0);
+            return sumValue;
+        }
     }
 }
 </script>
