@@ -9,6 +9,7 @@
                 </div>
             </div>
             <button @click="addRow">+</button>
+            <button v-if="isMoreZero" @click="removeRow">-</button>
         </div>
     </div>
 </template>
@@ -28,7 +29,15 @@ export default {
     methods: {
         addRow() {
             this.rowCount += 1;
+        },
+        removeRow() {
+            this.rowCount -= 1;
         }
+    },
+    computed: {
+        isMoreZero() {
+            return this.rowCount > 0;
+        },
     }
 }
 </script>
