@@ -3,13 +3,13 @@
         <p>これはCalculateTaxコンポーネントです</p>
 
         <div>
+            <button @click="addRow">列の追加</button>
+            <button v-if="isMoreZero" @click="removeRow">列の削除</button>
             <div v-for="i of rowCount" :key="i">
                 <div class="input-row">
                     <div v-html="inputRow" v-for="inputRow of inputRows" :key="inputRow" ></div>
                 </div>
             </div>
-            <button @click="addRow">+</button>
-            <button v-if="isMoreZero" @click="removeRow">-</button>
         </div>
     </div>
 </template>
