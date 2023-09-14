@@ -27,7 +27,7 @@ export default {
     },
     methods: {
         addRow() {
-
+            this.rowCount += 1;
         }
     }
 }
