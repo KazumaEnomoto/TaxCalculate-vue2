@@ -3,6 +3,10 @@
         <p>これはCalculateTaxコンポーネントです</p>
 
         <div>
+            <div>
+                <button @click="switchTax">税率切り替え</button>
+                <p>現在の税率は{{taxRate}}%です</p>
+            </div>
             <button @click="addRow">列の追加</button>
             <button v-if="isMoreZero" @click="removeRow">列の削除</button>
             <div v-for="(i, index) of rowCount" :key="i">
@@ -29,7 +33,8 @@ export default {
         return {
             rowCount: 3,
             values: [0, 0, 0],
-            taxRate: 1.08,
+            taxRate: 8,
+            tax: true,
         };
     },
     methods: {
@@ -40,6 +45,14 @@ export default {
         removeRow() {
             this.rowCount -= 1;
             this.values.splice(this.rowCount - 1, 1);
+        },
+        switchTax() {
+            this.tax = !this.tax;
+            if (this.tax === true) {
+                this.taxRate = 8;
+            } else {
+                this.taxRate = 10;
+            }
         },
         check() {
             console.log(this.values);
@@ -58,7 +71,7 @@ export default {
         },
         taxAddedValues() {
             // 少数内における微妙な誤差の除去
-            return Math.floor(this.sumValues * this.taxRate * 100) / 100; 
+            return Math.floor(this.sumValues * (this.taxRate / 100 + 1)  * 100) / 100; 
         }
     }
 }
