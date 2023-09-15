@@ -11,8 +11,9 @@
             <div v-for="(i, index) of rowCount" :key="i">
                 <div class="input-row">
                     <input type="text" placeholder="品目" v-model.number="items[index]">
-                    <input type="number" placeholder="数量" v-model.number="quantity[index]">
-                    <input type="number" placeholder="0" v-model.number="values[index]">
+                    <input type="number" v-model.number="quantity[index]">
+                    <input type="number" v-model.number="values[index]">
+                    <input type="number" v-model.number="taxedValues[index]" readonly>
                 </div>
             </div>
             <div>
@@ -23,6 +24,7 @@
                 <input type="number" v-model.number="inputSum">
             </div>
         </div>
+        <button @click="addTax()">税込価格を計算する</button>
         <button @click="checkValue()">計算する</button>
         <button @click="check()">確認する</button>
     </div>
@@ -36,6 +38,7 @@ export default {
             items: ['', '', ''],
             quantity: [0, 0, 0],
             values: [0, 0, 0],
+            taxedValues :[0, 0, 0],
             taxRate: 8,
             tax: true,
             inputSum: 0,
@@ -44,15 +47,15 @@ export default {
     methods: {
         addRow() {
             this.rowCount += 1;
-            this.items.splice(this.rowCount - 1, 0, '');
-            this.quantity.splice(this.rowCount - 1, 0, 0);
-            this.values.splice(this.rowCount - 1, 0, 0);
+            this.items.splice(this.rowCount, 0, '');
+            this.quantity.splice(this.rowCount, 0, 0);
+            this.values.splice(this.rowCount, 0, 0);
         },
         removeRow() {
             this.rowCount -= 1;
-            this.items.splice(this.rowCount - 1, 1);
-            this.quantity.splice(this.rowCount - 1, 1);
-            this.values.splice(this.rowCount - 1, 1);
+            this.items.splice(this.rowCount, 1);
+            this.quantity.splice(this.rowCount, 1);
+            this.values.splice(this.rowCount, 1);
         },
         switchTax() {
             this.tax = !this.tax;
@@ -69,10 +72,17 @@ export default {
                 console.log("合計値と合致していません");
             }
         },
+        addTax() {
+            this.taxedValues = [];
+            this.values.forEach((value) => {
+                this.taxedValues.push(value * (1 + this.taxRate / 100));
+            });
+        },
         check() {
             console.log(this.items);
             console.log(this.quantity);
             console.log(this.values);
+            console.log(this.taxedValues);
         },
     },
     computed: {
