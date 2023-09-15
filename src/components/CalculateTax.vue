@@ -10,8 +10,8 @@
             <button v-if="isMoreZero" @click="removeRow">列の削除</button>
             <div v-for="(i, index) of rowCount" :key="i">
                 <div class="input-row">
-                    <input type="text" placeholder="品目" >
-                    <input type="number" placeholder="数量">
+                    <input type="text" placeholder="品目" v-model.number="items[index]">
+                    <input type="number" placeholder="数量" v-model.number="quantity[index]">
                     <input type="number" placeholder="0" v-model.number="values[index]">
                 </div>
             </div>
@@ -33,6 +33,8 @@ export default {
     data() {
         return {
             rowCount: 3,
+            items: ['', '', ''],
+            quantity: [0, 0, 0],
             values: [0, 0, 0],
             taxRate: 8,
             tax: true,
@@ -42,10 +44,14 @@ export default {
     methods: {
         addRow() {
             this.rowCount += 1;
+            this.items.splice(this.rowCount - 1, 0, '');
+            this.quantity.splice(this.rowCount - 1, 0, 0);
             this.values.splice(this.rowCount - 1, 0, 0);
         },
         removeRow() {
             this.rowCount -= 1;
+            this.items.splice(this.rowCount - 1, 1);
+            this.quantity.splice(this.rowCount - 1, 1);
             this.values.splice(this.rowCount - 1, 1);
         },
         switchTax() {
@@ -64,6 +70,8 @@ export default {
             }
         },
         check() {
+            console.log(this.items);
+            console.log(this.quantity);
             console.log(this.values);
         },
     },
