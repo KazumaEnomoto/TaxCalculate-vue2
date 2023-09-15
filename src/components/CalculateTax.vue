@@ -1,7 +1,6 @@
 <template>
     <div>
         <p>これはCalculateTaxコンポーネントです</p>
-
         <div>
             <div>
                 <button @click="switchTax">税率切り替え</button>
@@ -19,10 +18,12 @@
             <div>
                 <p>インプットの合計額：{{sumValues}}</p>
                 <p>インプットに税率をかけた合計額：{{taxAddedValues}}</p>
+                <p>実際に算出される合計額：{{Math.floor(taxAddedValues)}}</p>
                 <p>レシートの合計額</p>
-                <input type="number" >
+                <input type="number" v-model.number="inputSum">
             </div>
         </div>
+        <button @click="checkValue()">計算する</button>
         <button @click="check()">確認する</button>
     </div>
 </template>
@@ -35,6 +36,7 @@ export default {
             values: [0, 0, 0],
             taxRate: 8,
             tax: true,
+            inputSum: 0,
         };
     },
     methods: {
@@ -52,6 +54,13 @@ export default {
                 this.taxRate = 8;
             } else {
                 this.taxRate = 10;
+            }
+        },
+        checkValue() {
+            if (Math.floor(this.taxAddedValues) === this.inputSum) {
+                console.log("合計値と合致しています");
+            } else {
+                console.log("合計値と合致していません");
             }
         },
         check() {
