@@ -9,15 +9,17 @@
                 <div class="input-row">
                     <input type="text" placeholder="品目" >
                     <input type="number" placeholder="数量">
-                    <input type="number" value=0 placeholder="合計額" v-model.number="values[index]">
+                    <input type="number" placeholder="0" v-model.number="values[index]">
                 </div>
             </div>
             <div>
                 <p>インプットの合計額：{{sumValues}}</p>
+                <p>インプットに税率をかけた合計額：{{taxAddedValues}}</p>
                 <p>レシートの合計額</p>
                 <input type="number" >
             </div>
         </div>
+        <button @click="check()">確認する</button>
     </div>
 </template>
 
@@ -27,6 +29,7 @@ export default {
         return {
             rowCount: 3,
             values: [0, 0, 0],
+            taxRate: 1.08,
         };
     },
     methods: {
@@ -38,8 +41,12 @@ export default {
             this.rowCount -= 1;
             this.values.splice(this.rowCount - 1, 1);
         },
+        check() {
+            console.log(this.values);
+        },
     },
     computed: {
+        // 入力列削除ボタンの表示切り替え基準
         isMoreZero() {
             return this.rowCount > 0;
         },
@@ -48,6 +55,10 @@ export default {
                 return sumValue + value;
             }, 0);
             return sumValue;
+        },
+        taxAddedValues() {
+            // 少数内における微妙な誤差の除去
+            return Math.floor(this.sumValues * this.taxRate * 100) / 100; 
         }
     }
 }
