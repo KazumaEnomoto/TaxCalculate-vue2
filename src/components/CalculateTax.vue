@@ -21,6 +21,7 @@
                 <p>インプットの合計額：{{sumValues}}</p>
                 <p>インプットに税率をかけた合計額：{{addTaxSumValues}}</p>
                 <p>実際に算出される合計額：{{Math.floor(addTaxSumValues)}}</p>
+                <p>品目ごとの税込価格の合計額：{{sumRoundedValues}}</p>
                 <p>レシートの合計額</p>
                 <input type="number" v-model.number="inputSum">
             </div>
@@ -117,8 +118,12 @@ export default {
             // 少数内における微妙な誤差の除去
             return this.roundDown(this.addTax(this.sumValues));
         },
-        
-        
+        sumRoundedValues() {
+            const sumRoundedValue = this.roundedValues.reduce((sumRoundedValue, value) => {
+                return sumRoundedValue + value;
+            }, 0);
+            return sumRoundedValue;
+        },
     }
 }
 </script>
