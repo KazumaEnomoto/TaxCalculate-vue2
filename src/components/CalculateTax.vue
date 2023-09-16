@@ -14,6 +14,7 @@
                     <input type="number" v-model.number="quantity[index]">
                     <input type="number" v-model.number="values[index]">
                     <input type="number" v-model.number="taxedValues[index]" readonly>
+                    <input type="number" v-model.number="roundedValues[index]" readonly>
                 </div>
             </div>
             <div>
@@ -25,6 +26,7 @@
             </div>
         </div>
         <button @click="calculateTaxedValues()">税込価格を計算する</button>
+        <button @click="calculateRoundedValues()">税込価格の端数を丸める</button>
         <button @click="checkValue()">計算する</button>
         <button @click="check()">確認する</button>
     </div>
@@ -39,6 +41,7 @@ export default {
             quantity: [0, 0, 0],
             values: [0, 0, 0],
             taxedValues :[0, 0, 0],
+            roundedValues:[0, 0, 0],
             taxRate: 8,
             tax: true,
             inputSum: 0,
@@ -72,17 +75,25 @@ export default {
                 console.log("合計値と合致していません");
             }
         },
+        /* 下記の2つの処理を分割するのは、品目ごとの税別価格を調整する際に端数ありの価格が必要になるため */
         calculateTaxedValues() {
             this.taxedValues = [];
             this.values.forEach((value) => {
                 this.taxedValues.push(this.roundDown(this.addTax(value)));
             });
         },
+        calculateRoundedValues() {
+            this.roundedValues = [];
+            this.taxedValues.forEach((taxedValue) => {
+                this.roundedValues.push(Math.round(taxedValue));
+            })
+        },
         check() {
             console.log(this.items);
             console.log(this.quantity);
             console.log(this.values);
             console.log(this.taxedValues);
+            console.log(this.roundedValues);
         },
         addTax(e) {
             return e * (1 + this.taxRate / 100);
