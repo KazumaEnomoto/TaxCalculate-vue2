@@ -10,11 +10,9 @@
             <button v-if="isMoreZero" @click="removeRow">列の削除</button>
             <div v-for="(i, index) of rowCount" :key="i">
                 <div class="input-row">
-                    <input type="text" placeholder="品目" v-model.number="items[index]">
+                    <input type="text" v-model.number="items[index]">
                     <input type="number" v-model.number="quantity[index]">
                     <input type="number" v-model.number="values[index]">
-                    <input type="number" v-model.number="taxedValues[index]" readonly>
-                    <input type="number" v-model.number="roundedValues[index]" readonly>
                 </div>
             </div>
             <div>
@@ -25,11 +23,19 @@
                 <p>レシートの合計額</p>
                 <input type="number" v-model.number="inputSum">
             </div>
+            <button @click="calculateTaxedValues()">税込価格を計算する</button>
+            <button @click="calculateRoundedValues()">税込価格の端数を丸める</button>
+            <button @click="checkValue()">計算する</button>
+            <button @click="check()">確認する</button>
+            <button @click="showOutput()">output表示切り替え</button>
+            <div v-show="output" v-for="(item, index) of items" :key="item">
+                <div class="output-row">
+                    <input type="text" v-model="items[index]">
+                    <input type="number" v-model.number="taxedValues[index]" readonly>
+                    <input type="number" v-model.number="roundedValues[index]" readonly>
+                </div>
+            </div>
         </div>
-        <button @click="calculateTaxedValues()">税込価格を計算する</button>
-        <button @click="calculateRoundedValues()">税込価格の端数を丸める</button>
-        <button @click="checkValue()">計算する</button>
-        <button @click="check()">確認する</button>
     </div>
 </template>
 
@@ -38,7 +44,7 @@ export default {
     data() {
         return {
             rowCount: 3,
-            items: ['', '', ''],
+            items: ['品物1', '品物2', '品物3'],
             quantity: [0, 0, 0],
             values: [0, 0, 0],
             taxedValues :[0, 0, 0],
@@ -46,12 +52,13 @@ export default {
             taxRate: 8,
             tax: true,
             inputSum: 0,
+            output: false,
         };
     },
     methods: {
         addRow() {
             this.rowCount += 1;
-            this.items.splice(this.rowCount, 0, '');
+            this.items.splice(this.rowCount, 0, '品物' + this.rowCount);
             this.quantity.splice(this.rowCount, 0, 0);
             this.values.splice(this.rowCount, 0, 0);
         },
@@ -89,6 +96,12 @@ export default {
                 this.roundedValues.push(Math.round(taxedValue));
             })
         },
+        addTax(e) {
+            return e * (1 + this.taxRate / 100);
+        },
+        roundDown(e) {
+            return Math.floor(e * 100) / 100; // 入力値の小数点第３位以下を切り捨て
+        },
         check() {
             console.log(this.items);
             console.log(this.quantity);
@@ -96,11 +109,8 @@ export default {
             console.log(this.taxedValues);
             console.log(this.roundedValues);
         },
-        addTax(e) {
-            return e * (1 + this.taxRate / 100);
-        },
-        roundDown(e) {
-            return Math.floor(e * 100) / 100; // 入力値の小数点第３位以下を切り捨て
+        showOutput() {
+            this.output = !this.output;
         }
     },
     computed: {
