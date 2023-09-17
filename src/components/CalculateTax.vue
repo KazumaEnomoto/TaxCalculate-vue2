@@ -17,15 +17,14 @@
             </div>
             <div>
                 <p>インプットの合計額：{{sumValues}}</p>
-                <p>インプットに税率をかけた合計額：{{addTaxSumValues}}</p>
-                <p>実際に算出される合計額：{{Math.floor(addTaxSumValues)}}</p>
+                <p>インプットに税率をかけた合計額：{{taxedSumValues}}</p>
                 <p>品目ごとの税込価格の合計額：{{sumRoundedValues}}</p>
                 <p>レシートの合計額</p>
                 <input type="number" v-model.number="inputSum">
             </div>
             <button @click="calculateTaxedValues()">税込価格を計算する</button>
             <button @click="calculateRoundedValues()">税込価格の端数を丸める</button>
-            <button @click="checkValue()">計算する</button>
+            <button @click="adjustValues()">計算する</button>
             <button @click="check()">確認する</button>
             <button @click="showOutput()">output表示切り替え</button>
             <div v-show="output" v-for="(item, index) of items" :key="item">
@@ -76,16 +75,9 @@ export default {
                 this.taxRate = 10;
             }
         },
-        checkValue() {
-            if (Math.floor(this.addTaxSumValues) === this.inputSum) {
-                console.log("合計値と合致しています");
-            } else {
-                console.log("合計値と合致していません");
-            }
-        },
         adjustValues() {
             // 等しい場合は調整せずに出力
-            if ( this.addTaxSumValues === this.sumRoundedValues ) {
+            if ( this.taxedSumValues === this.sumRoundedValues ) {
                 console.log('値を調整しません');
             } else {
                 console.log('値を調整します');
@@ -132,9 +124,8 @@ export default {
             }, 0);
             return sumValue;
         },
-        addTaxSumValues() {
-            // 少数内における微妙な誤差の除去
-            return this.roundDown(this.addTax(this.sumValues));
+        taxedSumValues() {
+            return Math.floor(this.addTax(this.sumValues));
         },
         sumRoundedValues() {
             const sumRoundedValue = this.roundedValues.reduce((sumRoundedValue, value) => {
