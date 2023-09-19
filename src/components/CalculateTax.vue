@@ -26,6 +26,7 @@
             <button @click="calculateRoundedValues()">税込価格の端数を丸める</button>
             <button @click="adjustValues()">計算する</button>
             <button @click="check()">確認する</button>
+            <button @click="checkBlanc()">空欄の有無を確認する</button>
             <button @click="showOutput()">output表示切り替え</button>
             <div v-show="output" v-for="(item, index) of items" :key="item">
                 <div class="output-row">
@@ -110,6 +111,13 @@ export default {
             console.log(this.values);
             console.log(this.taxedValues);
             console.log(this.roundedValues);
+        },
+        checkBlanc() {
+            if (this.items.indexOf('') === 0) {
+                console.log('error：空白があります');
+            } else {
+                console.log('品物の配列に問題はありません');
+            }
         },
         showOutput() {
             this.output = !this.output;
