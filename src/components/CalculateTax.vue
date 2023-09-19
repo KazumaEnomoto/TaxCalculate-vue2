@@ -22,14 +22,12 @@
                 <p>レシートの合計額</p>
                 <input type="number" v-model.number="inputSum">
             </div>
-            <button @click="calculateTaxedValues()">税込価格を計算する</button>
-            <button @click="calculateRoundedValues()">税込価格の端数を丸める</button>
-            <button @click="adjustValues()">計算する</button>
             <button @click="check()">確認する</button>
-            <button @click="showOutput()">output表示切り替え</button>
+            <button @click="adjustValues()">計算する</button>
+            <button @click="clearOutput()">計算結果を削除</button>
             <div v-show="output" v-for="(item, index) of items" :key="item">
                 <div class="output-row">
-                    <input type="text" v-model="items[index]">
+                    <input type="text" v-model="items[index]" readonly>
                     <input type="number" v-model.number="taxedValues[index]" readonly>
                     <input type="number" v-model.number="roundedValues[index]" readonly>
                 </div>
@@ -89,6 +87,7 @@ export default {
             })
         },
         adjustValues() {
+            this.output = "true";
             // items配列に空文字がある場合は処理しない
             if (this.items.indexOf('') !== -1) {
                 console.log('配列に空文字が含まれています');
@@ -116,8 +115,10 @@ export default {
             console.log(this.taxedValues);
             console.log(this.roundedValues);
         },
-        showOutput() {
-            this.output = !this.output;
+        clearOutput() {
+            this.taxedValues = [];
+            this.roundedValues = [];
+            this.output = false;
         }
     },
     computed: {
