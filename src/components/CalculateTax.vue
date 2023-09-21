@@ -128,7 +128,7 @@ export default {
             return e * (1 + this.taxRate / 100);
         },
         roundDown(e) {
-            return Math.floor(e * 100) / 100; // 入力値の小数点第３位以下を切り捨て
+            return Math.round(e * 100) / 100; // 入力値の小数点第３位以下を切り捨て
         },
         check() {
             console.log(this.items);
