@@ -111,6 +111,7 @@ export default {
             }
         },
         adjustValues() {
+            this.difference = [];
             // taxedValuesの取得→小数点以降のみを切り出し
             for (let i=0; i<this.rowCount; i++) {
                 if (this.roundedValues[i] >= this.taxedValues[i]) {
