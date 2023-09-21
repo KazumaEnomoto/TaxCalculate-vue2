@@ -45,9 +45,9 @@ export default {
             items: ['品物1', '品物2', '品物3'],
             quantity: [0, 0, 0],
             values: [0, 0, 0],
-            taxedValues :[],
-            roundedValues:[],
-            difference:[],
+            taxedValues: [],
+            roundedValues: [],
+            valuesAfterDicimalPoint: [],
             taxRate: 8,
             tax: true,
             inputSum: 0,
@@ -111,16 +111,16 @@ export default {
             }
         },
         adjustValues() {
-            this.difference = [];
+            this.valuesAfterDicimalPoint = [];
             // taxedValuesの取得→小数点以降のみを切り出し
             for (let i=0; i<this.rowCount; i++) {
-                if (this.roundedValues[i] >= this.taxedValues[i]) {
-                    this.difference.push(this.roundDown(this.roundedValues[i] - this.taxedValues[i]));
+                if (this.taxedValues[i] >= this.roundedValues[i]) {
+                    this.valuesAfterDicimalPoint.push(this.roundDown(this.taxedValues[i] - this.roundedValues[i]));
                 } else {
-                    this.difference.push(this.roundDown(this.taxedValues[i] - this.roundedValues[i]));
+                    this.valuesAfterDicimalPoint.push(this.roundDown((this.taxedValues[i] + 1) - this.roundedValues[i]))
                 }
             }
-            console.log(this.difference);
+            console.log(this.valuesAfterDicimalPoint);
             // 小数点以降が最も小さいものを修正
             // roundedValuesを修正
         },
