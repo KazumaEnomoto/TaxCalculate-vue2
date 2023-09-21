@@ -122,7 +122,12 @@ export default {
             }
             console.log(this.valuesAfterDicimalPoint);
             // 小数点以降が最も小さいものを修正
+            const min = Math.min(...this.valuesAfterDicimalPoint);
+            console.log(min);
+            const minIndex = this.valuesAfterDicimalPoint.indexOf(min);
+            console.log(minIndex);
             // roundedValuesを修正
+            this.roundedValues[minIndex] -= 1; 
         },
         addTax(e) {
             return e * (1 + this.taxRate / 100);
