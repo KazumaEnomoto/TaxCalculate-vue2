@@ -15,6 +15,7 @@
                     <input type="number" v-model.number="values[index]">
                 </div>
             </div>
+            <p v-show="error">商品名を入力してください</p>
             <div>
                 <p>インプットの合計額：{{sumValues}}</p>
                 <p>インプットに税率をかけた合計額：{{taxedSumValues}}</p>
@@ -50,6 +51,7 @@ export default {
             tax: true,
             inputSum: 0,
             output: false,
+            error: false,
         };
     },
     methods: {
@@ -91,7 +93,9 @@ export default {
             // items配列に空文字がある場合は処理しない
             if (this.items.indexOf('') !== -1) {
                 console.log('配列に空文字が含まれています');
+                this.error = true;
             } else {
+                this.error = false;
                 this.calculateTaxedValues();
                 this.calculateRoundedValues();
                 // 等しい場合は調整せずに出力
