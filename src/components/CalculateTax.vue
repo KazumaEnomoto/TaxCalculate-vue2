@@ -114,11 +114,7 @@ export default {
             this.valuesAfterDicimalPoint = [];
             // taxedValuesの取得→小数点以降のみを切り出し
             for (let i=0; i<this.rowCount; i++) {
-                if (this.taxedValues[i] >= this.roundedValues[i]) {
-                    this.valuesAfterDicimalPoint.push(this.roundDown(this.taxedValues[i] - this.roundedValues[i]));
-                } else {
-                    this.valuesAfterDicimalPoint.push(this.roundDown((this.taxedValues[i] + 1) - this.roundedValues[i]))
-                }
+                this.valuesAfterDicimalPoint.push(this.roundDown(this.taxedValues[i] - (this.roundedValues[i] - 1)));
             }
             console.log(this.valuesAfterDicimalPoint);
             // 小数点以降が最も小さいものを修正
@@ -127,7 +123,7 @@ export default {
             const minIndex = this.valuesAfterDicimalPoint.indexOf(min);
             console.log(minIndex);
             // roundedValuesを修正
-            this.roundedValues[minIndex] -= 1; 
+            this.roundedValues[minIndex] -= 1;
         },
         addTax(e) {
             return e * (1 + this.taxRate / 100);
@@ -137,7 +133,6 @@ export default {
         },
         check() {
             console.log(this.items);
-            console.log(this.quantity);
             console.log(this.values);
             console.log(this.taxedValues);
             console.log(this.roundedValues);
