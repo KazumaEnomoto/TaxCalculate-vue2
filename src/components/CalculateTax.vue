@@ -24,7 +24,7 @@
                 <input type="number" v-model.number="inputSum">
             </div>
             <button @click="check()">確認する</button>
-            <button @click="adjustValues()">計算する</button>
+            <button @click="calculateValues()">計算する</button>
             <button @click="clearOutput()">計算結果を削除</button>
             <div v-show="output" v-for="(item, index) of items" :key="item">
                 <div class="output-row">
@@ -47,6 +47,7 @@ export default {
             values: [0, 0, 0],
             taxedValues :[],
             roundedValues:[],
+            difference:[],
             taxRate: 8,
             tax: true,
             inputSum: 0,
@@ -88,7 +89,7 @@ export default {
                 this.roundedValues.push(Math.round(taxedValue));
             })
         },
-        adjustValues() {
+        calculateValues() {
             // items配列に空文字がある場合は処理しない
             if (this.items.indexOf('') !== -1) {
                 console.log('配列に空文字が含まれています');
@@ -104,8 +105,23 @@ export default {
                     console.log('値を調整しません');
                 } else {
                     console.log('値を調整します');
+                    // 値を調整する関数で処理
+                    this.adjustValues();
                 }
             }
+        },
+        adjustValues() {
+            // taxedValuesの取得→小数点以降のみを切り出し
+            for (let i=0; i<this.rowCount; i++) {
+                if (this.roundedValues[i] >= this.taxedValues[i]) {
+                    this.difference.push(this.roundDown(this.roundedValues[i] - this.taxedValues[i]));
+                } else {
+                    this.difference.push(this.roundDown(this.taxedValues[i] - this.roundedValues[i]));
+                }
+            }
+            console.log(this.difference);
+            // 小数点以降が最も小さいものを修正
+            // roundedValuesを修正
         },
         addTax(e) {
             return e * (1 + this.taxRate / 100);
