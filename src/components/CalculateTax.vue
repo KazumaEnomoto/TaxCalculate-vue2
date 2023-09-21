@@ -89,12 +89,13 @@ export default {
             })
         },
         adjustValues() {
-            this.output = "true";
             // items配列に空文字がある場合は処理しない
             if (this.items.indexOf('') !== -1) {
                 console.log('配列に空文字が含まれています');
+                this.output = false;
                 this.error = true;
             } else {
+                this.output = true;
                 this.error = false;
                 this.calculateTaxedValues();
                 this.calculateRoundedValues();
