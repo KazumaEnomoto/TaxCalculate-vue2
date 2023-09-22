@@ -122,8 +122,13 @@ export default {
             console.log(min);
             const minIndex = this.valuesAfterDicimalPoint.indexOf(min);
             console.log(minIndex);
+            console.log(...this.roundedValues);
             // roundedValuesを修正
             this.roundedValues[minIndex] -= 1;
+            this.valuesAfterDicimalPoint[minIndex] = 1;
+            console.log(...this.roundedValues);
+            console.log(...this.valuesAfterDicimalPoint);
+            console.log(this.sumRoundedValues);
         },
         addTax(e) {
             return e * (1 + this.taxRate / 100);
